@@ -9,7 +9,6 @@ public class Employee {
         MALE, FEMALE
     }
 
-    // Class Child untuk menggabungkan data anak
     private static class Child {
         private String name;
         private String idNumber;
@@ -26,7 +25,7 @@ public class Employee {
     private String idNumber;
     private String address;
     
-    private LocalDate joinDate; // Menggunakan LocalDate dari Branch 2
+    private LocalDate joinDate;
     private int monthWorkingInYear;
     
     private boolean isForeigner;
@@ -39,7 +38,6 @@ public class Employee {
     private String spouseName;
     private String spouseIdNumber;
 
-    // Menggunakan list Child daripada 2 list terpisah
     private List<Child> children;
     
     public Employee(String employeeId, String firstName, String lastName, String idNumber, String address, LocalDate joinDate, boolean isForeigner, Gender gender) {
@@ -55,23 +53,24 @@ public class Employee {
         children = new LinkedList<>();
     }
     
-    public void setMonthlySalary(int grade) {    
+    /**
+     * Fungsi untuk menentukan gaji bulanan pegawai berdasarkan grade kepegawaiannya
+     * Menghilangkan duplikasi code dalam perhitungan gaji foreigner
+     */
+    public void setMonthlySalary(int grade) {
+        // Tentukan base salary berdasarkan grade
+        int baseSalary = 0;
+        
         if (grade == 1) {
-            monthlySalary = 3000000;
-            if (isForeigner) {
-                monthlySalary = (int) (3000000 * 1.5);
-            }
-        }else if (grade == 2) {
-            monthlySalary = 5000000;
-            if (isForeigner) {
-                monthlySalary = (int) (3000000 * 1.5);
-            }
-        }else if (grade == 3) {
-            monthlySalary = 7000000;
-            if (isForeigner) {
-                monthlySalary = (int) (3000000 * 1.5);
-            }
+            baseSalary = 3000000;
+        } else if (grade == 2) {
+            baseSalary = 5000000;
+        } else if (grade == 3) {
+            baseSalary = 7000000;
         }
+        
+        // Terapkan multiplier untuk foreigner sekali saja
+        monthlySalary = isForeigner ? (int)(baseSalary * 1.5) : baseSalary;
     }
     
     public void setAnnualDeductible(int deductible) {    
