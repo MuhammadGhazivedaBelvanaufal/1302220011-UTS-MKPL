@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Employee {
-    // Mengganti boolean gender dengan enum
     public enum Gender {
         MALE, FEMALE
     }
@@ -16,13 +15,12 @@ public class Employee {
     private String idNumber;
     private String address;
     
-    private int yearJoined;
-    private int monthJoined;
-    private int dayJoined;
+    // Menggunakan LocalDate untuk tanggal bergabung
+    private LocalDate joinDate;
     private int monthWorkingInYear;
     
     private boolean isForeigner;
-    private Gender gender; // Menggunakan enum Gender
+    private Gender gender; // Tetap menggunakan enum Gender dari Branch 1
     
     private int monthlySalary;
     private int otherMonthlyIncome;
@@ -34,15 +32,13 @@ public class Employee {
     private List<String> childNames;
     private List<String> childIdNumbers;
     
-    public Employee(String employeeId, String firstName, String lastName, String idNumber, String address, int yearJoined, int monthJoined, int dayJoined, boolean isForeigner, Gender gender) {
+    public Employee(String employeeId, String firstName, String lastName, String idNumber, String address, LocalDate joinDate, boolean isForeigner, Gender gender) {
         this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.idNumber = idNumber;
         this.address = address;
-        this.yearJoined = yearJoined;
-        this.monthJoined = monthJoined;
-        this.dayJoined = dayJoined;
+        this.joinDate = joinDate;
         this.isForeigner = isForeigner;
         this.gender = gender;
         
@@ -88,11 +84,12 @@ public class Employee {
     }
     
     public int getAnnualIncomeTax() {
-        LocalDate date = LocalDate.now();
+        LocalDate currentDate = LocalDate.now();
         
-        if (date.getYear() == yearJoined) {
-            monthWorkingInYear = date.getMonthValue() - monthJoined;
-        }else {
+        // Menghitung bulan bekerja menggunakan LocalDate
+        if (currentDate.getYear() == joinDate.getYear()) {
+            monthWorkingInYear = currentDate.getMonthValue() - joinDate.getMonthValue();
+        } else {
             monthWorkingInYear = 12;
         }
         
