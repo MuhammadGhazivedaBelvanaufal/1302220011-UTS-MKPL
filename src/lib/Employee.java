@@ -9,18 +9,28 @@ public class Employee {
         MALE, FEMALE
     }
 
+    // Class Child untuk menggabungkan data anak
+    private static class Child {
+        private String name;
+        private String idNumber;
+        
+        public Child(String name, String idNumber) {
+            this.name = name;
+            this.idNumber = idNumber;
+        }
+    }
+
     private String employeeId;
     private String firstName;
     private String lastName;
     private String idNumber;
     private String address;
     
-    // Menggunakan LocalDate untuk tanggal bergabung
-    private LocalDate joinDate;
+    private LocalDate joinDate; // Menggunakan LocalDate dari Branch 2
     private int monthWorkingInYear;
     
     private boolean isForeigner;
-    private Gender gender; // Tetap menggunakan enum Gender dari Branch 1
+    private Gender gender;
     
     private int monthlySalary;
     private int otherMonthlyIncome;
@@ -29,8 +39,8 @@ public class Employee {
     private String spouseName;
     private String spouseIdNumber;
 
-    private List<String> childNames;
-    private List<String> childIdNumbers;
+    // Menggunakan list Child daripada 2 list terpisah
+    private List<Child> children;
     
     public Employee(String employeeId, String firstName, String lastName, String idNumber, String address, LocalDate joinDate, boolean isForeigner, Gender gender) {
         this.employeeId = employeeId;
@@ -42,8 +52,7 @@ public class Employee {
         this.isForeigner = isForeigner;
         this.gender = gender;
         
-        childNames = new LinkedList<String>();
-        childIdNumbers = new LinkedList<String>();
+        children = new LinkedList<>();
     }
     
     public void setMonthlySalary(int grade) {    
@@ -79,20 +88,18 @@ public class Employee {
     }
     
     public void addChild(String childName, String childIdNumber) {
-        childNames.add(childName);
-        childIdNumbers.add(childIdNumber);
+        children.add(new Child(childName, childIdNumber));
     }
     
     public int getAnnualIncomeTax() {
         LocalDate currentDate = LocalDate.now();
         
-        // Menghitung bulan bekerja menggunakan LocalDate
         if (currentDate.getYear() == joinDate.getYear()) {
             monthWorkingInYear = currentDate.getMonthValue() - joinDate.getMonthValue();
         } else {
             monthWorkingInYear = 12;
         }
         
-        return TaxFunction.calculateTax(monthlySalary, otherMonthlyIncome, monthWorkingInYear, annualDeductible, spouseIdNumber.equals(""), childIdNumbers.size());
+        return TaxFunction.calculateTax(monthlySalary, otherMonthlyIncome, monthWorkingInYear, annualDeductible, spouseIdNumber.equals(""), children.size());
     }
 }
